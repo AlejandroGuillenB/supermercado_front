@@ -4,7 +4,7 @@
         "es2021": true
     },
     "extends": [
-        "standard-with-typescript",
+        "eslint-config-love",
         "plugin:react/recommended"
     ],
     "parserOptions": {
