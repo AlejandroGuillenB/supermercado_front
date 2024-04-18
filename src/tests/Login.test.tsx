@@ -22,6 +22,5 @@ describe('Login', () => {
     const elem = screen.getAllByText('Login');
 
     expect(elem[0]).toBeInTheDocument();
-
   });
 });

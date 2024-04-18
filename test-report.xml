@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="C:\Users\guill\Documents\react-demo\src\tests\Login.test.tsx">
+    <testCase name="Login renders correctly" duration="103"/>
+  </file>
+</testExecutions>
