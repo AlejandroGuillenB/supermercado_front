@@ -1,31 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "../api/axiosInstance";
-
-type User = {
-  name: string;
-  pass: string;
-};
-
-type NewUser = User & {
-  name: string;
-};
-
-type UserBasicInfo = {
-  id: number;
-  username: string;
-  password: string;
-};
-
-type UserProfileData = {
-  username: string;
-};
-
-type AuthApiState = {
-  basicUserInfo?: UserBasicInfo | null;
-  userProfileData?: UserProfileData | null;
-  status: 'idle' | 'loading' | 'failed';
-  error: string | null;
-};
+import { AxiosError } from "axios";
+import { AuthApiState, NewUser, User, UserBasicInfo } from "../utils/models";
 
 const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
 const config = {
@@ -44,7 +20,6 @@ const initialState: AuthApiState = {
 export const login = createAsyncThunk('login', async (data: User) => {
   const response = await axiosInstance.post('/auth/login', data);
   const resData = response.data;
-
   localStorage.setItem('userInfo', JSON.stringify(resData));
 
   return resData;
@@ -64,10 +39,27 @@ export const logout = createAsyncThunk('logout', async () => {
   return true;
 });
 
-export const getUser = createAsyncThunk('users/profile', async (userId: number) => {
-  const response = await axiosInstance.get(`/users/${userId}`, config);
-  return response.data;
-});
+export const getUser = createAsyncThunk('users/profile',
+  async (userId: number, { rejectWithValue }) => {
+    try {
+      axiosInstance.get(`/users/${userId}`, config)
+        .then(response => {
+          return response.data;
+        })
+        .catch((error: AxiosError) => {
+          if (error.response!.status !== 200) {
+            return rejectWithValue(error);
+          }
+          return error.response?.data;
+        });
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        const errorResponse = error.response.data;
+        return rejectWithValue(errorResponse);
+      }
+      throw error;
+    }
+  });
 
 const authSlice = createSlice({
   name: 'auth',

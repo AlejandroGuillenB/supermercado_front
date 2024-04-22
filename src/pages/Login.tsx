@@ -30,10 +30,10 @@ const Login = () => {
           })
         ).unwrap();
       } catch (e) {
-        console.error(e);
+        return e;
       }
     } else {
-      console.error('Login failed');
+      alert('Login failed');
     }
   };
 
