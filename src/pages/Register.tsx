@@ -32,10 +32,10 @@ const Register = () => {
           })
         ).unwrap();
       } catch (e) {
-        console.error(e);
+        return e;
       }
     } else  {
-      console.error('Register failed');
+      alert('Register failed');
     }
   };
 

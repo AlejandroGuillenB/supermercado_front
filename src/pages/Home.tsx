@@ -1,38 +1,23 @@
-import React, { useEffect } from "react";
-import { Button } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
-import { getUser, logout } from "../slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import Banner from "../utils/Banner";
+import Clientes from "./Clientes";
+import { pagesEnum } from "../constants";
 
 const Home = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const [component, setComponent] = useState(<></>);
 
-  const basicUserInfo = useAppSelector((state) => state.auth.basicUserInfo);
-  const userProfileInfo = useAppSelector((state) => state.auth.userProfileData);
-
-  useEffect(() => {
-    if (basicUserInfo) {
-      dispatch(getUser(basicUserInfo.id));
+  const handlePage = (page: string) => {
+    if (page === pagesEnum.Cli) {
+      setComponent(<Clientes></Clientes>);
+      return;
     }
-  }, [basicUserInfo, dispatch]);
-
-  const handleLogout = async () => {
-    try {
-      await dispatch(logout()).unwrap();
-      navigate('/login');
-    } catch (e) {
-      console.error(e);
-    }
-  };
+    setComponent(<></>);
+  }
 
   return (
     <>
-      <h1>Home</h1>
-      <h4>Name: {userProfileInfo?.username}</h4>
-      <Button variant="contained" sx={{ mt: 3, mb: 2 }} onClick={handleLogout}>
-        Logout
-      </Button>
+      <Banner page={handlePage}></Banner>
+      {component}
     </>
   );
 };

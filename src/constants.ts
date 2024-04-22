@@ -1,1 +1,6 @@
-export const BACKEND_BASE_URL = "https://supermercado-back.vercel.app";
+export const pages = ['Clientes', 'Empleados'];
+
+export enum pagesEnum {
+  Cli = 'Clientes',
+  Emp = 'Empleados',
+}
